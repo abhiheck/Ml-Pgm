@@ -1,0 +1,43 @@
+#include <iostream>
+#include <stack>
+#include <vector>
+#include <omp.h>
+using namespace std;
+vector <int> graph[10000];
+bool visited[10000];
+
+void bfs(int node){
+    stack <int> s;
+    s.push(node);
+    while(!s.empty()){
+        int curr_node = s.top();
+        visited[curr_node]= true;
+        cout<< curr_node <<"\n";
+        s.pop();
+        #pragma omp parallel for
+        for (int i = 0; i < graph[curr_node].size();i++){
+            int adj = graph[curr_node][i];
+            if (!visited[adj]){
+                s.push(adj);
+            }
+        }
+    }
+}
+
+int main(){
+    int n,m,start_node;
+    cout<<"Enter N, M, and Start Node \n";
+    cin>> n >> m>> start_node;
+    cout<< "Enter The edges \n";
+    for (int i = 0; i<m ; i++){
+        int u,v;
+        cin>> u>>v;
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+    #pragma omp parallel for
+    for (int i = 0; i<n ; i++){
+        visited[i]= false;
+    }
+    bfs(start_node);
+}

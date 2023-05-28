@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+using namespace std;
+void merge(vector <int> &arr, int l, int m, int r){
+    int i, j, k;
+    int n1= m-l+1;
+    int n2= r-m;
+    vector <int> L1(n1),L2(n2);
+    for(i=0; i<n1;i++){
+        L1[i]=arr[l+i];
+    }
+    for(j=0; j<n2;j++){
+        L2[j]=arr[m+1+j];
+    }
+    // merge 2 sub arr
+    i =0;
+    j =0;
+    k =l;
+    
+    while(i<n1 && j<n2){
+        if (L1[i]>L2[j]){
+            arr[k++]=L2[j++];
+        }
+        else{
+            arr[k++]=L1[i++];
+        }
+    }
+    while(i<n1){
+        arr[k++]=L1[i++];
+    }
+    while(j<n2){
+        arr[k++]=L2[j++];
+    }
+}
+
+void merge_sort(vector <int> &arr,int l, int r){
+    int m = l+(r-l)/2;
+    if (l<r){
+        
+        merge_sort(arr,l,m);
+        merge_sort(arr,m+1,r);
+    }
+    merge(arr,l , m, r);
+}
+
+int main() {
+    int n;
+    cout<<"Enter number of elements\n";
+    cin>>n;
+    vector <int> arr(n);
+    for(int i=0; i<n; i++){
+        arr[i] = rand()%100;
+    }
+    for (int num: arr){
+    cout<< num<<" ";    
+    }
+    
+    merge_sort(arr,0,n-1);
+    
+    cout<<"sorted\n";
+    for (int i = 0; i<n ; i++){
+        cout<< arr[i]<<" ";    
+    }
+    return 0;
+}

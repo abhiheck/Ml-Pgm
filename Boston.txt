@@ -1,0 +1,27 @@
+//Boston housing
+import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+from sklearn import preprocessing
+
+(train_x,train_y),(test_x,test_y) = keras.datasets.boston_housing.load_data()
+
+train_x.shape
+
+train_x = preprocessing.normalize(train_x)
+test_x = preprocessing.normalize(test_x)
+
+train_x[0]
+
+model = keras.models.Sequential([
+    keras.layers.Dense(128,activation="relu",input_shape=(13,)),
+    keras.layers.Dense(64,activation="relu"),
+    keras.layers.Dense(32,activation="relu"),
+    keras.layers.Dense(1)
+])
+model.compile(optimizer="rmsprop",loss='mse',metrics=["mae"])
+
+model.fit(train_x,train_y, epochs=100,batch_size=1, verbose=1,validation_data=(test_x,test_y))
+
+test = test_x
+print(model.predict(test[1:2]))
